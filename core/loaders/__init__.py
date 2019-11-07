@@ -1,3 +1,4 @@
+import logging
 import requests
 from bs4 import BeautifulSoup
 
@@ -9,9 +10,12 @@ from regluit.core.bookloader import add_from_bookdatas, BasePandataLoader
 from .scrape import BaseScraper
 from .hathitrust import HathitrustScraper
 from .pressbooks import PressbooksScraper
+from .routledge import RoutledgeScraper
 from .springer import SpringerScraper
-from .ubiquity import UbiquityScraper
 from .smashwords import SmashwordsScraper
+from .ubiquity import UbiquityScraper
+
+logger = logging.getLogger(__name__)
 
 def get_scraper(url):
     scrapers = [
@@ -20,6 +24,7 @@ def get_scraper(url):
         UbiquityScraper,
         SmashwordsScraper,
         HathitrustScraper,
+        RoutledgeScraper,
         BaseScraper,
     ]
     for scraper in scrapers:
@@ -55,6 +60,7 @@ def add_by_sitemap(url, maxnum=None):
     
 def scrape_language(url):
     scraper = get_scraper(url)
-    return scraper.metadata.get('language')
+    language = scraper.metadata.get('language')
+    return language if language else 'xx'
 
 

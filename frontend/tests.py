@@ -10,7 +10,7 @@ from decimal import Decimal as D
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.core import mail
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.test import TestCase
 from django.test.client import Client
 from django.utils.timezone import now
@@ -220,7 +220,7 @@ class PledgingUiTests(TestCase):
         #self.assertEqual(self.client.session['_auth_user_id'], self.user.pk)  
         
         user = auth.get_user(self.client)
-        assert user.is_authenticated()
+        assert user.is_authenticated
 
 
         # load a Work by putting it on the User's wishlist
@@ -373,11 +373,10 @@ class UnifiedCampaignTests(TestCase):
 
         # expect to have 3 events (there is a possibility that someone else could be running tests on this stripe account at the same time)
         # events returned sorted in reverse chronological order.
-
-        self.assertEqual(len(events), 3)
-        self.assertEqual(events[0].type, 'charge.succeeded')
-        self.assertEqual(events[1].type, 'customer.card.created')
-        self.assertEqual(events[2].type, 'customer.created')
+        evt_types = [event.type for event in events]
+        self.assertTrue('charge.succeeded' in evt_types)
+        self.assertTrue('customer.card.created' in evt_types)
+        self.assertTrue('customer.created' in evt_types)
 
         # now feed each of the events to the IPN processor.
         ipn_url = reverse("HandleIPN", args=('stripelib',))
@@ -406,10 +405,10 @@ class UnifiedCampaignTests(TestCase):
         # expect to have 3 events (there is a possibility that someone else could be running tests on this stripe account at the same time)
         # events returned sorted in reverse chronological order.
 
-        self.assertEqual(len(events), 3)
-        self.assertEqual(events[0].type, 'charge.failed')
-        self.assertEqual(events[1].type, 'customer.card.created')
-        self.assertEqual(events[2].type, 'customer.created')
+        evt_types = [event.type for event in events]
+        self.assertTrue('charge.failed' in evt_types)
+        self.assertTrue('customer.card.created' in evt_types)
+        self.assertTrue('customer.created' in evt_types)
 
         # now feed each of the events to the IPN processor.
         ipn_url = reverse("HandleIPN", args=('stripelib',))

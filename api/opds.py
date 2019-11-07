@@ -3,7 +3,7 @@ from itertools import islice
 from lxml import etree
 import datetime
 import urlparse
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.utils.http import urlquote
 
 import pytz
@@ -206,7 +206,7 @@ class Facet:
 
 def get_facet_facet(facet_path):
     class Facet_Facet(Facet):
-    
+
         def __init__(self, facet_path=facet_path):
             self.feed_path = facet_path
             self.facet_object = facets.get_facet_object(facet_path)

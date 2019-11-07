@@ -1,7 +1,7 @@
 regluit - "The Unglue.it web application and website"
 =======
 
-This repo - https://github.com/EbookFoundation/regluit will be the place for collaborative development for Unglue.it. Add issues and submit pull requests here. As of January 19, 2017, https://github.com/Gluejar/regluit is still being used for production builds.
+Another repo - https://github.com/EbookFoundation/regluit will eventually be the place for collaborative development for Unglue.it. Add issues and submit pull requests there. As of September 1, 2019, https://github.com/Gluejar/regluit is still being used for production builds.
 
 The first version of the unglue.it codebase was a services-oriented project named "unglu".
 We decided that "unglu" was too complicated, so we started over and named the new project "regluit".
@@ -10,34 +10,9 @@ contains four main applications: `core`, `frontend`, `api` and `payment` that ca
 and configured on as many ec2 instances that are needed to support traffic.
 The partitioning between these modules is not as clean as would be ideal. `payment` is particularly messy because we had to retool it twice because we had to switch from Paypal to Amazon Payments to Stripe.
 
-regluit was originally developed on Django 1.3 (python 2.7) and currently runs on Django 1.8.
+regluit was originally developed on Django 1.3 (python 2.7) and currently runs on Django 1.11.
 
-Development (Vagrant + Virtualbox)
--------
-
-The recommended method for local development is to create a virtual machine with [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/wiki/Downloads).
-With this method, the only requirements on the host machine are `virtualbox` and `vagrant`.
-Vagrant will use the `ansible-local` provisioner, therefore installing python and ansible on the host machine is not necessary.
-
-__Instructions for Ubuntu 16:__
-1. Install virtualbox: `sudo apt-get install virtualbox`
-2. Install vagrant: `sudo apt-get install vagrant`
-3. Clone the `EbookFoundation/regluit` repository.
-4. Navigate to the base directory of the cloned repo (where `Vagrantfile` is located).
-5. Run `vagrant up` to create the VM, install dependencies, and start necessary services.
-  * Note: This step may take up to 15 minutes to complete.
-6. Once the VM has been created, run `vagrant ssh` to log in to the virtual machine you just created. If provisioning was successful, you should see a success message upon login.
-  * If virtualenv doesn't activate upon login, you can do it manually by running `cd /opt/regluit && source venv/bin/activate`
-7. Within the VM, run `./manage.py runserver 0.0.0.0:8000` to start the Django development server.
-8. On your host machine, open your web browser of choice and navigate to `http://127.0.0.1:8000`
-
-__Instructions for other platforms (Windows/OSX):__
-* Steps are essentially the same, except for the installation of Vagrant and Virtualbox. Refer to each package's documentation for specific installation instructions.
-
-_NOTE:_ If running Windows on your host machine, ensure you are running `vagrant up` from an elevated command prompt, e.g. right click on Command Prompt -> Run As Administrator. 
-
-
-Development (Host Machine)
+Develop
 -------
 
 Here are some instructions for setting up regluit for development on

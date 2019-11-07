@@ -1,12 +1,12 @@
 from tastypie.models import ApiKey
 
-import json
+import json as json_module
 import logging
 
 from django.contrib import auth
 from django.contrib.auth.models import User
 from django.contrib.sites.models import Site
-from django.core.urlresolvers import reverse
+from django.urls import reverse
 from django.shortcuts import render, render_to_response
 from django.template import RequestContext
 from django.views.decorators.csrf import csrf_exempt
@@ -115,7 +115,7 @@ def travisci_webhook(request):
     
         try:
             
-            data = json.loads(request.POST.get('payload'))
+            data = json_module.loads(request.POST.get('payload'))
 
             # example of URL to feed to yaml loader:
             # https://github.com/GITenberg/Adventures-of-Huckleberry-Finn_76/raw/master/metadata.yaml
@@ -152,7 +152,7 @@ class ApiHelpView(TemplateView):
         
         # if user is logged in, pass in the user's API key
         u = auth.get_user(self.request)
-        if u.is_authenticated():
+        if u.is_authenticated:
             api_key = ApiKey.objects.filter(user=u)[0].key
             context['api_key'] = api_key
         
@@ -167,11 +167,11 @@ class ApiHelpView(TemplateView):
         return context    
 
 class OPDSNavigationView(TemplateView):
-    json=False
+    json = False
     # https://stackoverflow.com/a/6867976: secret to how to change content-type
     
     def render_to_response(self, context, **response_kwargs):
-        if json:
+        if self.json:
             response_kwargs['content_type'] = "application/vnd.opds.navigation+json"
         else:
             response_kwargs['content_type'] = "application/atom+xml;profile=opds-catalog;kind=navigation"
@@ -179,7 +179,7 @@ class OPDSNavigationView(TemplateView):
     
     def get_context_data(self, **kwargs):
         context = super(OPDSNavigationView, self).get_context_data(**kwargs)
-        if json:
+        if self.json:
             context["feeds"] = opds_json.feeds()
             context["feed"] = opds_json.get_facet_facet('all')
         else:
@@ -216,24 +216,35 @@ class OPDSAcquisitionView(View):
 
 
 class OnixView(View):
-
     def get(self, request, *args, **kwargs):
         work = request.GET.get('work', None)
+
         if work:
             try:
-                work=models.safe_get_work(work)
+                work = models.safe_get_work(work)
             except models.Work.DoesNotExist:
-                raise Http404 
-            return HttpResponse(onix.onix_feed_for_work(work),
-                            content_type="text/xml")
+                raise Http404
+            return HttpResponse(onix.onix_feed_for_work(work), content_type="text/xml")
+
         facet = kwargs.get('facet', 'all')
-        if facet:
-            max = request.GET.get('max', 100)
-            try:
-                max = int(max)
-            except:
-                max = None
-            facet_class = opds.get_facet_class(facet)()
-            return HttpResponse(onix.onix_feed(facet_class, max),
-                                content_type="text/xml")
+
+        if not facet:
+            return HttpResponseBadRequest(content='No facet provided')
+
+        max_records = request.GET.get('max', 100)
+
+        try:
+            max_records = int(max_records)
+        except Exception:
+            max_records = None
+
+        facet_class = opds.get_facet_class(facet)()
+        page = request.GET.get('page', None)
+        try:
+            page = int(page)
+        except:
+            page = None
+
+        feed = onix.onix_feed(facet_class, max_records, page_number=page)
+        return HttpResponse(feed, content_type="text/xml")
 
