@@ -1,26 +1,26 @@
-regluit - "The Unglue.it web application and website"
+regular - "The Unglue.it web application and website"
 =======
 
 This repo - https://github.com/EbookFoundation/regluit will eventually be the place for collaborative development for Unglue.it. Add issues and submit pull requests here. As of September 1, 2019, https://github.com/Gluejar/regluit is still being used for production builds.
 
-The first version of the unglue.it codebase was a services-oriented project named "unglu".
-We decided that "unglu" was too complicated, so we started over and named the new project "regluit".
-regluit is a Django project that
-contains four main applications: `core`, `frontend`, `api` and `payment` that can be deployed
+The first version of the unglue.it codebase was a services-oriented project named "unglue".
+We decided that "unglue" was too complicated, so we started over and named the new project "regulate".
+regulate is a Django project that
+contains four main applications: `core`, `frontend`, `API`, and `payment` that can be deployed
 and configured on as many ec2 instances that are needed to support traffic.
 The partitioning between these modules is not as clean as would be ideal. `payment` is particularly messy because we had to retool it twice because we had to switch from Paypal to Amazon Payments to Stripe.
 
-regluit was originally developed on Django 1.3 (python 2.7) and currently runs on Django 1.8.
+regulate was originally developed on Django 1.3 (python 2.7) and currently runs on Django 1.8.
 
 Development (Vagrant + Virtualbox)
 -------
 
 The recommended method for local development is to create a virtual machine with [Vagrant](https://www.vagrantup.com/) and [Virtualbox](https://www.virtualbox.org/wiki/Downloads).
-With this method, the only requirements on the host machine are `virtualbox` and `vagrant`.
-Vagrant will use the `ansible-local` provisioner, therefore installing python and ansible on the host machine is not necessary.
+With this method, the only requirements on the host machine are `VirtualBox` and `vagrant`.
+Vagrant will use the `ansible-local` provisioner, therefore installing python and Ansible on the host machine is not necessary.
 
 __Instructions for Ubuntu 16:__
-1. Install virtualbox: `sudo apt-get install virtualbox`
+1. Install VirtualBox: `sudo apt-get install virtualbox`
 2. Install vagrant: `sudo apt-get install vagrant`
 3. Clone the `EbookFoundation/regluit` repository.
 4. Navigate to the base directory of the cloned repo (where `Vagrantfile` is located).
@@ -34,18 +34,18 @@ __Instructions for Ubuntu 16:__
 __Instructions for other platforms (Windows/OSX):__
 * Steps are essentially the same, except for the installation of Vagrant and Virtualbox. Refer to each package's documentation for specific installation instructions.
 
-_NOTE:_ If running Windows on your host machine, ensure you are running `vagrant up` from an elevated command prompt, e.g. right click on Command Prompt -> Run As Administrator. 
+_NOTE:_ If running Windows on your host machine, ensure you are running `vagrant up` from an elevated command prompt, e.g. right-click on Command Prompt -> Run As Administrator. 
 
 
 Development (Host Machine)
 -------
 
-Here are some instructions for setting up regluit for development on
+Here are some instructions for setting up regular for development on
 an Ubuntu system. If you are on OS X see notes below
 to install python-setuptools in step 1:
 
 1. Ensure MySQL and Redis are installed & running on your system.
-1. Create a MySQL database and user for unglueit.
+1. Create a MySQL database and user for unglued.
 1. `sudo apt-get upgrade gcc`
 1. `sudo apt-get install python-setuptools git python-lxml build-essential libssl-dev libffi-dev python2.7-dev libxml2-dev libxslt-dev libmysqlclient-dev`
 1. `sudo easy_install virtualenv virtualenvwrapper`
@@ -60,25 +60,25 @@ to install python-setuptools in step 1:
 1. Edit `settings/me.py` with proper mysql and redis configurations.
 1. Edit  `settings/keys/common.py` and `settings/keys/host.py` with account and key information OR if you have the ansible vault password, run `ansible-playbook create_keys.yml` inside the vagrant directory.
 1. `echo 'export DJANGO_SETTINGS_MODULE=regluit.settings.me' >> ~/.virtualenvs/regluit/bin/postactivate`
-1. `deactivate ; workon regluit`
-1. `django-admin.py migrate --noinput`
-1. `django-admin.py loaddata core/fixtures/initial_data.json core/fixtures/bookloader.json` populate database with test data to run properly.
-1. `django-admin.py celeryd --loglevel=INFO` start the celery daemon to perform asynchronous tasks like adding related editions, and display logging information in the foreground.
-1. `django-admin.py celerybeat -l INFO` to start the celerybeat daemon to handle scheduled tasks.
-1. `django-admin.py runserver 0.0.0.0:8000` (you can change the port number from the default value of 8000)
+1. `deactivate; work on regular`
+1. `Django-admin.py migrate --input`
+1. `Django-admin.py load data core/fixtures/initial_data.json core/fixtures/bookloader.json` populate the database with test data to run properly.
+1. `Django-admin.py celery --loglevel=INFO` start the celery daemon to perform asynchronous tasks like adding related editions, and display logging information in the foreground.
+1. `Django-admin.py celery beat -l INFO` to start the celery beat daemon to handle scheduled tasks.
+1. `Django-admin.py run server 0.0.0.0:8000` (you can change the port number from the default value of 8000)
 1. make sure a [redis server](https://redis.io/topics/quickstart) is running
 1. Point your browser to http://localhost:8000/
 
 CSS development
 
-1. We used Less version 2.8 for CSS. http://incident57.com/less/. We use minified CSS.
-1. New CSS development is using SCSS. Install libsass and django-compressor.
+1. We used Less version 2.8 for CSS. http://incident57.com/less/. We use the minified CSS.
+1. New CSS development is using SCSS. Install libsass and Django-compressor.
 
 Production Deployment
 ---------------------
 
 OBSOLETE
-Below are the steps for getting regluit running on EC2 with Apache and mod_wsgi, and talking to an Amazon Relational Data Store instance.
+Below are the steps for getting regular running on EC2 with Apache and mod_wsgi, and talking to an Amazon Relational Data Store instance.
 Instructions for setting please are slightly different.
 
 1. create an ubuntu ec2 instance (e.g, go http://alestic.com/ to find various ubuntu images)
@@ -91,11 +91,11 @@ Instructions for setting please are slightly different.
 1. `git config --global user.name "Raymond Yee"`
 1. `git config --global user.email "rdhyee@gluejar.com"`
 1. `ssh-keygen`
-1. add `~/.ssh/id\_rsa.pub` as a deploy key on github https://github.com/Gluejar/regluit/admin/keys
+1. add `~/.ssh/id\_rsa.pub` as a deploy key on Github https://github.com/Gluejar/regluit/admin/keys
 1. `git clone git@github.com:Gluejar/regluit.git`
-1. `cd /opt/regluit`
+1. `cd /opt/regulate`
 1. create an Amazon RDS instance
-1. connect to it, e.g. `mysql -u root -h gluejardb.cboagmr25pjs.us-east-1.rds.amazonaws.com -p`
+1. connect to it, e.g. `MySQL -u root -h gluejardb.cboagmr25pjs.us-east-1.rds.amazonaws.com -p`
 1. `CREATE DATABASE unglueit CHARSET utf8;`
 1. `GRANT ALL ON unglueit.\* TO ‘unglueit’@’ip-10-244-250-168.ec2.internal’ IDENTIFIED BY 'unglueit' REQUIRE SSL;`
 1. update settings/prod.py with database credentials
@@ -129,7 +129,7 @@ Instructions for setting please are slightly different.
 1. `sudo chown celery:celery /var/log/celerybeat`
 1. `sudo /etc/init.d/celerybeat start`
 
-## setup to enable ckeditor to work properly
+## setup to enable CKEditor to work properly
 
 1. `mkdir /var/www/static/media/`
 1. `sudo chown ubuntu:www-data /var/www/static/media/`
@@ -147,7 +147,7 @@ it has [changed from what's in production](https://github.com/Gluejar/regluit/co
 OS X Developer Notes
 -------------------
 
-To run regluit on OS X you should have XCode installed
+To run regular on OS X you should have XCode installed
 
 Install virtualenvwrapper according
 to the process at http://blog.praveengollakota.com/47430655:
@@ -200,12 +200,12 @@ MARC Records
     1. Find the book in [catalog.loc.gov](http://catalog.loc.gov/)
     1. Click on the permalink in its record (will look something like [lccn.loc.gov/2009009516](http://lccn.loc.gov/2009009516))
     1. Download MARCXML
-1. At /marc/ungluify/ , enter the _unglued edition_ in the Edition field, upload file, choose license
+1. At /marc/ungluify/, enter the _unglued edition_ in the Edition field, upload file, choose the license
 1. The XML record will be automatically...
-    * converted to suitable MARCXML and .mrc records, with both direct and via-unglue.it download links
+    * converted to suitable MARCXML and .mrc records, with both direct and via-unglue.it downloads links
     * written to S3
     * added to a new instance of MARCRecord
-    * provided to ungluers at /marc/
+    * provided to anglers at /marc/
 
 ### For CC/PD books with existing records that link to the ebook edition
 1. Use /admin to create a new MARC record instance
@@ -214,21 +214,21 @@ MARC Records
 1. Select the relevant edition
 1. Select an appropriate marc_format:
     * use DIRECT if it links directly to the ebook file
-    * use UNGLUE if it links to the unglue.it download page
+    * use UNGLUE if it links to the unglue.it downloads page
     * if you have records with both DIRECT and UNGLUE links, you'll need two MARCRecord instances
     * if you have both kinds of link, put them in _separate_ records, as marc_format can only take one value    
 `ungluify_record.py` should only be used to modify records of print editions of unglued ebooks.  It will not produce appropriate results for CC/PD ebooks.
 
 ### For unglued ebooks without print edition MARC records, or CC/PD books without ebook MARC records
 1. Get a contract cataloger to produce quality records (.xml and .mrc formats)
-    * we are using ung[x] as the format for our accession numbers, where [x] is the id of the MARCRecord instance, plus leading zeroes
+    * We are using ung[x] as the format for our accession numbers, where [x] is the id of the MARCRecord instance, plus leading zeroes
 1. Upload those records to s3 (or wherever)
 1. Create a MARCRecord instance in /admin
 1. Add the URLs of the .xml and .mrc records to the appropriate fields
 1. Select the relevant edition
 1. Select an appropriate marc_format:
     * use DIRECT if it links directly to the ebook file
-    * use UNGLUE if it links to the unglue.it download page
+    * use UNGLUE if it links to the unglue.it downloads page
     * if you have records with both DIRECT and UNGLUE links, you'll need two MARCRecord instances
     * if you have both kinds of link, put them in _separate_ records, as marc_format can only take one value
 
