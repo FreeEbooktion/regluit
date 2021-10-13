@@ -21,7 +21,7 @@ Layout of important files:
 * [Vagrantfile](https://github.com/Gluejar/regluit/blob/1ac55c4f0a6b6a3dfc97652aa5ce33638a6140a1/vagrant/Vagrantfile), which is what `vagrant` looks for and defines various hosts: `please`, `just`, `just2`, `prod`, and `prod2`. 
 * [dev.yml](https://github.com/Gluejar/regluit/blob/1ac55c4f0a6b6a3dfc97652aa5ce33638a6140a1/vagrant/dev.yml) -- the main ansible playbook that builds the various machines
 
-* `please` is for buiding `please.unglue.it` -- it is a transient machine
+* `please` is for building `please.unglue.it` -- it is a transient machine
 * the reason I have a `just` *group* with `just` and `just2` hosts is while one is in production, I build the new one.  Once the new one is working, I can `vagrant stop` and then ultimately `vagrant destroy` the old one.
 * similar logic for the production *group*. (Note that before I retire a production server, I copy over the logs to S3: [backing up production logs to S3](https://www.evernote.com/shard/s1/sh/f12406a7-de95-4d54-809d-9f3abe8eaabd/f935e813d8f16f25))
 
